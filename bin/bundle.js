@@ -22032,17 +22032,25 @@
 
 	    var _this = _possibleConstructorReturn(this, (Form.__proto__ || Object.getPrototypeOf(Form)).call(this, props));
 
-	    _this.state = { data: { term: '' } };
+	    _this.state = { data: { term: '' }, processing: false };
 	    _this._handleSubmit = _this._handleSubmit.bind(_this);
 	    _this._setData = _this._setData.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(Form, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      _Store2.default.on('change', function () {
+	        this.setState({ processing: false });
+	      }.bind(this));
+	    }
+	  }, {
 	    key: '_handleSubmit',
 	    value: function _handleSubmit(e) {
 	      e.preventDefault();
 	      _Store2.default.clear();
+	      this.setState({ processing: true });
 	      _Store2.default.fetchAll(this.state.data.term);
 	    }
 	  }, {
@@ -22065,6 +22073,11 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var buttonClassName = "button is-info is-large";
+	      if (this.state.processing) {
+	        buttonClassName += " is-loading";
+	      }
+
 	      return _react2.default.createElement(
 	        'form',
 	        { onSubmit: this._handleSubmit },
@@ -22074,7 +22087,7 @@
 	          _react2.default.createElement('input', { className: 'input is-large is-expanded', type: 'text', name: 'term', value: this.state.data.term, onChange: this._setData, onKeyDown: this._doNothing }),
 	          _react2.default.createElement(
 	            'button',
-	            { className: 'button is-info is-large' },
+	            { className: buttonClassName },
 	            'Search'
 	          )
 	        )
