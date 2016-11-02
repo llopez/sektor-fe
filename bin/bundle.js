@@ -21654,7 +21654,7 @@
 	var Store = Object.assign({}, _events2.default.prototype, {
 	  fetchAll: function fetchAll(term) {
 	    var q = encodeURIComponent(term);
-	    fetch('http://sektor.luigibyte.com.ar/api/v1/tracks?q=' + q, {
+	    fetch('http://sektor-api.luigibyte.com.ar/api/v1/tracks?q=' + q, {
 	      method: 'GET',
 	      headers: {
 	        'Accept': 'application/json',

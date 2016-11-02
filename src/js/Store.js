@@ -5,7 +5,7 @@ let _list = {};
 const Store = Object.assign({}, EventEmitter.prototype, {
   fetchAll: function(term) {
     let q = encodeURIComponent(term)
-    fetch('http://sektor.luigibyte.com.ar/api/v1/tracks?q=' + q, {
+    fetch('http://sektor-api.luigibyte.com.ar/api/v1/tracks?q=' + q, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
