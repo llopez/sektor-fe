@@ -4,14 +4,21 @@ import Store from './../Store';
 export default class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: { term: '' } };
+    this.state = {data: { term: '' }, processing: false};
     this._handleSubmit = this._handleSubmit.bind(this);
     this._setData = this._setData.bind(this);
+  }
+
+  componentWillMount() {
+    Store.on('change', function(){
+      this.setState({processing: false});
+    }.bind(this));
   }
 
   _handleSubmit(e) {
     e.preventDefault();
     Store.clear();
+    this.setState({processing: true});
     Store.fetchAll(this.state.data.term);
   }
 
@@ -29,11 +36,16 @@ export default class Form extends React.Component {
   }
 
   render() {
+    let buttonClassName = "button is-info is-large";
+    if (this.state.processing) {
+      buttonClassName += " is-loading";
+    }
+
     return (
       <form onSubmit={this._handleSubmit}>
         <p className="control has-addons">
           <input className="input is-large is-expanded" type="text" name="term" value={this.state.data.term} onChange={this._setData} onKeyDown={this._doNothing}/>
-          <button className="button is-info is-large">
+          <button className={buttonClassName}>
             Search
           </button>
         </p>
