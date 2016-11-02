@@ -21,11 +21,18 @@ export default class Form extends React.Component {
     this.setState({data: data});
   }
 
+  // Prevents submitting the form by pressing Enter
+  _doNothing(e){
+    if(e.keyCode == 13){
+      e.preventDefault();
+    }
+  }
+
   render() {
     return (
       <form onSubmit={this._handleSubmit}>
         <p className="control has-addons">
-          <input className="input is-large is-expanded" type="text" name="term" value={this.state.data.term} onChange={this._setData}/>
+          <input className="input is-large is-expanded" type="text" name="term" value={this.state.data.term} onChange={this._setData} onKeyDown={this._doNothing}/>
           <button className="button is-info is-large">
             Search
           </button>
