@@ -22052,6 +22052,16 @@
 	      data[e.target.name] = e.target.value;
 	      this.setState({ data: data });
 	    }
+
+	    // Prevents submitting the form by pressing Enter
+
+	  }, {
+	    key: '_doNothing',
+	    value: function _doNothing(e) {
+	      if (e.keyCode == 13) {
+	        e.preventDefault();
+	      }
+	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
@@ -22061,7 +22071,7 @@
 	        _react2.default.createElement(
 	          'p',
 	          { className: 'control has-addons' },
-	          _react2.default.createElement('input', { className: 'input is-large is-expanded', type: 'text', name: 'term', value: this.state.data.term, onChange: this._setData }),
+	          _react2.default.createElement('input', { className: 'input is-large is-expanded', type: 'text', name: 'term', value: this.state.data.term, onChange: this._setData, onKeyDown: this._doNothing }),
 	          _react2.default.createElement(
 	            'button',
 	            { className: 'button is-info is-large' },
