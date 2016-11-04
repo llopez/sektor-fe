@@ -23,9 +23,7 @@ export default class Form extends React.Component {
   }
 
   _setData(e) {
-    let data = {}
-    data[e.target.name] = e.target.value;
-    this.setState({data: data});
+    Store.setData(e.target.name, e.target.value);
   }
 
   // Prevents submitting the form by pressing Enter

@@ -1,6 +1,10 @@
 import EventEmitter from 'events';
 
-let _list = {};
+let _state = {
+  term: '',
+  page: 1,
+  list: {}
+};
 
 const Store = Object.assign({}, EventEmitter.prototype, {
   fetchAll: function(term) {
@@ -16,23 +20,26 @@ const Store = Object.assign({}, EventEmitter.prototype, {
       return res.json();
     }).then(function(res){
       res.forEach(function(data){
-        _list[data.id] = data;
+        _state['list'][data.id] = data;
       });
       this.emit('change');
     }.bind(this));
   },
 
   clear: function() {
-    _list = {};
+    _state['list'] = {};
     this.emit('change');
-    return _list;
+    return true;
   },
 
-  get: function() {
-    return {
-      list: _list
-    };
-  }
+  getState: function() {
+    return _state;
+  },
+
+  setData: function(name, value) {
+    _state[name] = value;
+    this.emit('change');
+  },
 });
 
 export default Store;
