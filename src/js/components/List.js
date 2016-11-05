@@ -15,8 +15,8 @@ export default class List extends React.Component {
   }
 
   _loadMore() {
-    console.log('more...');
-    //Store.fetchAll(this.state.term, this.state.page + 1);
+    Store.setData("processing", true);
+    Store.fetchPage();
   }
 
   render() {
@@ -29,24 +29,34 @@ export default class List extends React.Component {
       return null;
     }
 
+    let buttonClassName = "button";
+
+    if(this.state.processing){
+      buttonClassName += " is-loading";
+    }
+
     return (
       <div className="has-text-centered">
-      <table className="table">
-      <thead>
-      <tr>
-      <th>Title</th>
-      <th>Artist</th>
-      <th>Time (sec)</th>
-      <th>Size (kb)</th>
-      <th>Bitrate</th>
-      <th></th>
-      </tr>
-      </thead>
-      <tbody>
-      { items }
-      </tbody>
-      </table>
-      <a className="button" onClick={this._loadMore}>load more</a>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Artist</th>
+              <th>Time (sec)</th>
+              <th>Size (kb)</th>
+              <th>Bitrate</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            { items }
+          </tbody>
+        </table>
+        {(function() {
+          if(!this.state.lastPage) {
+            return <a className={buttonClassName} onClick={this._loadMore}>load more</a>;
+          }
+        }.bind(this))()}
       </div>
     );
   }

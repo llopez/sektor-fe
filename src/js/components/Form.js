@@ -4,26 +4,32 @@ import Store from './../Store';
 export default class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {data: { term: '' }, processing: false};
+    this.state = {
+      data: { term: Store.getState().term }, 
+      processing: Store.getState().processing
+    };
     this._handleSubmit = this._handleSubmit.bind(this);
-    this._setData = this._setData.bind(this);
+    this._setTerm = this._setTerm.bind(this);
   }
 
   componentWillMount() {
     Store.on('change', function(){
-      this.setState({processing: false});
+      this.setState({
+        data: { term: Store.getState().term },
+        processing: Store.getState().processing
+      });
     }.bind(this));
   }
 
   _handleSubmit(e) {
     e.preventDefault();
     Store.clear();
-    this.setState({processing: true});
-    Store.fetchAll(this.state.data.term);
+    Store.setData("processing", true);
+    Store.fetchPage();
   }
 
-  _setData(e) {
-    Store.setData(e.target.name, e.target.value);
+  _setTerm(e) {
+    Store.setData("term", e.target.value);
   }
 
   // Prevents submitting the form by pressing Enter
@@ -42,7 +48,7 @@ export default class Form extends React.Component {
     return (
       <form onSubmit={this._handleSubmit}>
         <p className="control has-addons">
-          <input className="input is-large is-expanded" type="text" name="term" value={this.state.data.term} onChange={this._setData} onKeyDown={this._doNothing}/>
+          <input className="input is-large is-expanded" type="text" name="term" value={this.state.data.term} onChange={this._setTerm} onKeyDown={this._doNothing}/>
           <button className={buttonClassName}>
             Search
           </button>
