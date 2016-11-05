@@ -21502,7 +21502,7 @@
 	        return null;
 	      }
 
-	      var buttonClassName = "button";
+	      var buttonClassName = "button is-primary";
 
 	      if (this.state.processing) {
 	        buttonClassName += " is-loading";
@@ -21576,7 +21576,7 @@
 /* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -21606,43 +21606,43 @@
 	  }
 
 	  _createClass(Item, [{
-	    key: 'render',
+	    key: "render",
 	    value: function render() {
 	      return _react2.default.createElement(
-	        'tr',
+	        "tr",
 	        null,
 	        _react2.default.createElement(
-	          'td',
+	          "td",
 	          null,
 	          this.props.title
 	        ),
 	        _react2.default.createElement(
-	          'td',
+	          "td",
 	          null,
 	          this.props.artist
 	        ),
 	        _react2.default.createElement(
-	          'td',
+	          "td",
 	          null,
 	          this.props.time
 	        ),
 	        _react2.default.createElement(
-	          'td',
+	          "td",
 	          null,
 	          this.props.size
 	        ),
 	        _react2.default.createElement(
-	          'td',
+	          "td",
 	          null,
 	          this.props.bitrate
 	        ),
 	        _react2.default.createElement(
-	          'td',
+	          "td",
 	          null,
 	          _react2.default.createElement(
-	            'a',
-	            { href: this.props.link },
-	            'Download'
+	            "a",
+	            { className: "button is-danger", href: this.props.link },
+	            "Download"
 	          )
 	        )
 	      );
