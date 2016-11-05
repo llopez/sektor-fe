@@ -14,7 +14,7 @@ export default class Item extends React.Component {
         <td>{this.props.time}</td>
         <td>{this.props.size}</td>
         <td>{this.props.bitrate}</td>
-        <td><a href={this.props.link}>Download</a></td>
+        <td><a className="button is-danger" href={this.props.link}>Download</a></td>
       </tr>
     );
   }

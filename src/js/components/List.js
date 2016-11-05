@@ -29,7 +29,7 @@ export default class List extends React.Component {
       return null;
     }
 
-    let buttonClassName = "button";
+    let buttonClassName = "button is-primary";
 
     if(this.state.processing){
       buttonClassName += " is-loading";
