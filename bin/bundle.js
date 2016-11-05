@@ -21473,7 +21473,7 @@
 
 	    var _this = _possibleConstructorReturn(this, (List.__proto__ || Object.getPrototypeOf(List)).call(this, props));
 
-	    _this.state = { items: _Store2.default.get().list };
+	    _this.state = _Store2.default.getState();
 	    return _this;
 	  }
 
@@ -21481,67 +21481,88 @@
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      _Store2.default.on('change', function () {
-	        this.setState({ items: _Store2.default.get().list });
+	        this.setState(_Store2.default.getState());
 	      }.bind(this));
+	    }
+	  }, {
+	    key: '_loadMore',
+	    value: function _loadMore() {
+	      _Store2.default.setData("processing", true);
+	      _Store2.default.fetchPage();
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var items = Object.keys(this.state.items).map(function (k) {
-	        var i = this.state.items[k];
+	      var items = Object.keys(this.state.list).map(function (k) {
+	        var i = this.state.list[k];
 	        return _react2.default.createElement(_Item2.default, { key: k, id: k, title: i.title, artist: i.artist, time: i.time, size: i.size, bitrate: i.bitrate, link: i.link });
 	      }.bind(this));
 
+	      if (items.length == 0) {
+	        return null;
+	      }
+
+	      var buttonClassName = "button";
+
+	      if (this.state.processing) {
+	        buttonClassName += " is-loading";
+	      }
+
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        function () {
-	          if (items.length > 0) {
-	            return _react2.default.createElement(
-	              'table',
-	              { className: 'table' },
+	        { className: 'has-text-centered' },
+	        _react2.default.createElement(
+	          'table',
+	          { className: 'table' },
+	          _react2.default.createElement(
+	            'thead',
+	            null,
+	            _react2.default.createElement(
+	              'tr',
+	              null,
 	              _react2.default.createElement(
-	                'thead',
+	                'th',
 	                null,
-	                _react2.default.createElement(
-	                  'tr',
-	                  null,
-	                  _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Title'
-	                  ),
-	                  _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Artist'
-	                  ),
-	                  _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Time (sec)'
-	                  ),
-	                  _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Size (kb)'
-	                  ),
-	                  _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Bitrate'
-	                  ),
-	                  _react2.default.createElement('th', null)
-	                )
+	                'Title'
 	              ),
 	              _react2.default.createElement(
-	                'tbody',
+	                'th',
 	                null,
-	                items
-	              )
+	                'Artist'
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                null,
+	                'Time (sec)'
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                null,
+	                'Size (kb)'
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                null,
+	                'Bitrate'
+	              ),
+	              _react2.default.createElement('th', null)
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'tbody',
+	            null,
+	            items
+	          )
+	        ),
+	        function () {
+	          if (!this.state.lastPage) {
+	            return _react2.default.createElement(
+	              'a',
+	              { className: buttonClassName, onClick: this._loadMore },
+	              'load more'
 	            );
 	          }
-	        }()
+	        }.bind(this)()
 	      );
 	    }
 	  }]);
@@ -21649,12 +21670,18 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _list = {};
+	var _state = {
+	  term: '',
+	  page: 1,
+	  list: {},
+	  processing: false,
+	  lastPage: false
+	};
 
 	var Store = Object.assign({}, _events2.default.prototype, {
-	  fetchAll: function fetchAll(term) {
-	    var q = encodeURIComponent(term);
-	    fetch('http://sektor-api.luigibyte.com.ar/api/v1/tracks?q=' + q, {
+	  fetchPage: function fetchPage() {
+	    var q = encodeURIComponent(_state['term']);
+	    fetch('http://sektor-api.luigibyte.com.ar/api/v1/tracks?q=' + q + "&page=" + _state['page'], {
 	      method: 'GET',
 	      headers: {
 	        'Accept': 'application/json',
@@ -21665,28 +21692,37 @@
 	      return res.json();
 	    }).then(function (res) {
 	      res.forEach(function (data) {
-	        _list[data.id] = data;
+	        _state['list'][data.id] = data;
 	      });
+	      _state['processing'] = false;
+
+	      if (res.length == 0) {
+	        _state['lastPage'] = true;
+	      } else {
+	        _state['page'] += 1;
+	      }
 	      this.emit('change');
 	    }.bind(this));
 	  },
 
 	  clear: function clear() {
-	    _list = {};
+	    _state['page'] = 1;
+	    _state['list'] = {};
 	    this.emit('change');
-	    return _list;
 	  },
 
-	  get: function get() {
-	    return {
-	      list: _list
-	    };
+	  setData: function setData(name, value) {
+	    _state[name] = value;
+	    this.emit('change');
+	  },
+
+	  getState: function getState() {
+	    return _state;
 	  }
+
 	});
 
 	exports.default = Store;
-
-	window.Store = Store;
 
 /***/ },
 /* 175 */
@@ -22032,9 +22068,12 @@
 
 	    var _this = _possibleConstructorReturn(this, (Form.__proto__ || Object.getPrototypeOf(Form)).call(this, props));
 
-	    _this.state = { data: { term: '' }, processing: false };
+	    _this.state = {
+	      data: { term: _Store2.default.getState().term },
+	      processing: _Store2.default.getState().processing
+	    };
 	    _this._handleSubmit = _this._handleSubmit.bind(_this);
-	    _this._setData = _this._setData.bind(_this);
+	    _this._setTerm = _this._setTerm.bind(_this);
 	    return _this;
 	  }
 
@@ -22042,7 +22081,10 @@
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      _Store2.default.on('change', function () {
-	        this.setState({ processing: false });
+	        this.setState({
+	          data: { term: _Store2.default.getState().term },
+	          processing: _Store2.default.getState().processing
+	        });
 	      }.bind(this));
 	    }
 	  }, {
@@ -22050,15 +22092,13 @@
 	    value: function _handleSubmit(e) {
 	      e.preventDefault();
 	      _Store2.default.clear();
-	      this.setState({ processing: true });
-	      _Store2.default.fetchAll(this.state.data.term);
+	      _Store2.default.setData("processing", true);
+	      _Store2.default.fetchPage();
 	    }
 	  }, {
-	    key: '_setData',
-	    value: function _setData(e) {
-	      var data = {};
-	      data[e.target.name] = e.target.value;
-	      this.setState({ data: data });
+	    key: '_setTerm',
+	    value: function _setTerm(e) {
+	      _Store2.default.setData("term", e.target.value);
 	    }
 
 	    // Prevents submitting the form by pressing Enter
@@ -22084,7 +22124,7 @@
 	        _react2.default.createElement(
 	          'p',
 	          { className: 'control has-addons' },
-	          _react2.default.createElement('input', { className: 'input is-large is-expanded', type: 'text', name: 'term', value: this.state.data.term, onChange: this._setData, onKeyDown: this._doNothing }),
+	          _react2.default.createElement('input', { className: 'input is-large is-expanded', type: 'text', name: 'term', value: this.state.data.term, onChange: this._setTerm, onKeyDown: this._doNothing }),
 	          _react2.default.createElement(
 	            'button',
 	            { className: buttonClassName },
