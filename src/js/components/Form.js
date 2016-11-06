@@ -40,7 +40,7 @@ export default class Form extends React.Component {
   }
 
   render() {
-    let buttonClassName = "button is-info is-large";
+    let buttonClassName = "button is-info";
     if (this.state.processing) {
       buttonClassName += " is-loading";
     }
@@ -48,10 +48,10 @@ export default class Form extends React.Component {
     return (
       <form onSubmit={this._handleSubmit}>
         <p className="control has-addons">
-          <input className="input is-large is-expanded" type="text" name="term" value={this.state.data.term} onChange={this._setTerm} onKeyDown={this._doNothing}/>
-          <button className={buttonClassName}>
-            Search
-          </button>
+          <input className="input is-large is-hidden-mobile is-expanded" type="text" name="term" value={this.state.data.term} onChange={this._setTerm} onKeyDown={this._doNothing}/>
+          <input className="input is-expanded is-hidden-tablet" type="text" name="term" value={this.state.data.term} onChange={this._setTerm} onKeyDown={this._doNothing}/>
+          <button className={buttonClassName + " is-large is-hidden-mobile"}>Search</button>
+          <button className={buttonClassName + " is-hidden-tablet"}>Search</button>
         </p>
       </form>
     );
