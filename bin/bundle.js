@@ -22113,7 +22113,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var buttonClassName = "button is-info is-large";
+	      var buttonClassName = "button is-info";
 	      if (this.state.processing) {
 	        buttonClassName += " is-loading";
 	      }
@@ -22124,10 +22124,16 @@
 	        _react2.default.createElement(
 	          'p',
 	          { className: 'control has-addons' },
-	          _react2.default.createElement('input', { className: 'input is-large is-expanded', type: 'text', name: 'term', value: this.state.data.term, onChange: this._setTerm, onKeyDown: this._doNothing }),
+	          _react2.default.createElement('input', { className: 'input is-large is-hidden-mobile is-expanded', type: 'text', name: 'term', value: this.state.data.term, onChange: this._setTerm, onKeyDown: this._doNothing }),
+	          _react2.default.createElement('input', { className: 'input is-expanded is-hidden-tablet', type: 'text', name: 'term', value: this.state.data.term, onChange: this._setTerm, onKeyDown: this._doNothing }),
 	          _react2.default.createElement(
 	            'button',
-	            { className: buttonClassName },
+	            { className: buttonClassName + " is-large is-hidden-mobile" },
+	            'Search'
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { className: buttonClassName + " is-hidden-tablet" },
 	            'Search'
 	          )
 	        )
