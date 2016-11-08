@@ -21533,12 +21533,12 @@
 	              _react2.default.createElement(
 	                'th',
 	                null,
-	                'Time (sec)'
+	                'Time'
 	              ),
 	              _react2.default.createElement(
 	                'th',
 	                null,
-	                'Size (kb)'
+	                'Size'
 	              ),
 	              _react2.default.createElement(
 	                'th',
@@ -21606,6 +21606,19 @@
 	  }
 
 	  _createClass(Item, [{
+	    key: "_formatTime",
+	    value: function _formatTime(seconds) {
+	      var min = Math.floor(seconds / 60);
+	      var sec = seconds - min * 60;
+	      return min + "m " + sec + "s";
+	    }
+	  }, {
+	    key: "_formatSize",
+	    value: function _formatSize(kilobytes) {
+	      var mb = Math.floor(kilobytes / 1024);
+	      return mb + "mb";
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -21624,12 +21637,12 @@
 	        _react2.default.createElement(
 	          "td",
 	          null,
-	          this.props.time
+	          this._formatTime(this.props.time)
 	        ),
 	        _react2.default.createElement(
 	          "td",
 	          null,
-	          this.props.size
+	          this._formatSize(this.props.size)
 	        ),
 	        _react2.default.createElement(
 	          "td",
