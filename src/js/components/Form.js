@@ -5,7 +5,7 @@ export default class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: { term: Store.getState().term }, 
+      data: { term: Store.getState().term },
       processing: Store.getState().processing
     };
     this._handleSubmit = this._handleSubmit.bind(this);
@@ -48,8 +48,8 @@ export default class Form extends React.Component {
     return (
       <form onSubmit={this._handleSubmit}>
         <p className="control has-addons">
-          <input className="input is-large is-hidden-mobile is-expanded" type="text" name="term" value={this.state.data.term} onChange={this._setTerm} onKeyDown={this._doNothing}/>
-          <input className="input is-expanded is-hidden-tablet" type="text" name="term" value={this.state.data.term} onChange={this._setTerm} onKeyDown={this._doNothing}/>
+          <input className="input is-large is-hidden-mobile is-expanded" type="text" name="term" value={this.state.data.term} onChange={this._setTerm} onKeyDown={this._doNothing} autoComplete="off"/>
+          <input className="input is-expanded is-hidden-tablet" type="text" name="term" value={this.state.data.term} onChange={this._setTerm} onKeyDown={this._doNothing} autoComplete="off"/>
           <button className={buttonClassName + " is-large is-hidden-mobile"}>Search</button>
           <button className={buttonClassName + " is-hidden-tablet"}>Search</button>
         </p>
