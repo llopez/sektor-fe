@@ -42,8 +42,8 @@ export default class List extends React.Component {
             <tr>
               <th>Title</th>
               <th>Artist</th>
-              <th>Time (sec)</th>
-              <th>Size (kb)</th>
+              <th>Time</th>
+              <th>Size</th>
               <th>Bitrate</th>
               <th></th>
             </tr>
